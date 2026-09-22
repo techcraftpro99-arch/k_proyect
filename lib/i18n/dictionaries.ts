@@ -16,6 +16,11 @@ export const dictionaries = {
       cart: "Cart",
       account: "Account",
       brand: "Designer's Blog",
+      menu: "Menu",
+    },
+    theme: {
+      light: "Light mode",
+      dark: "Dark mode",
     },
     about: {
       eyebrow: "Meet Karol",
@@ -218,6 +223,11 @@ export const dictionaries = {
       cart: "Carrito",
       account: "Cuenta",
       brand: "Blog de la diseñadora",
+      menu: "Menú",
+    },
+    theme: {
+      light: "Modo claro",
+      dark: "Modo oscuro",
     },
     about: {
       eyebrow: "Conoce a Karol",

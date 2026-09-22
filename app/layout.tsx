@@ -7,6 +7,7 @@ import { CartProvider } from "@/components/cart/CartProvider";
 import { LocaleProvider } from "@/components/i18n/LocaleProvider";
 import { GradientBackground } from "@/components/layout/GradientBackground";
 import { BrandProvider } from "@/components/brand/BrandProvider";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { getStoreSettings } from "@/lib/store-settings";
 
 const inter = Inter({
@@ -17,6 +18,8 @@ const inter = Inter({
 
 const storeName = process.env.NEXT_PUBLIC_STORE_NAME ?? "DesignStore";
 const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+
+const themeInitScript = `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`;
 
 export const metadata: Metadata = {
   title: {
@@ -46,18 +49,23 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const settings = await getStoreSettings();
 
   return (
-    <html lang="es" className={`${inter.variable} h-full`}>
+    <html lang="es" className={`${inter.variable} h-full`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="relative min-h-full">
-        <GradientBackground />
-        <LocaleProvider>
-          <BrandProvider brandImageUrl={settings.brandImageUrl}>
-            <CartProvider>
-              <Header />
-              <main className="relative z-10 flex-1">{children}</main>
-              <Footer />
-            </CartProvider>
-          </BrandProvider>
-        </LocaleProvider>
+        <ThemeProvider>
+          <GradientBackground />
+          <LocaleProvider>
+            <BrandProvider brandImageUrl={settings.brandImageUrl}>
+              <CartProvider>
+                <Header />
+                <main className="relative z-10 flex-1">{children}</main>
+                <Footer />
+              </CartProvider>
+            </BrandProvider>
+          </LocaleProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

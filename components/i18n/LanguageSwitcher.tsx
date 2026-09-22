@@ -14,7 +14,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-full border border-white/60 bg-white/70 p-0.5 text-xs font-semibold backdrop-blur-sm",
+        "inline-flex items-center rounded-full border border-border bg-background/70 p-0.5 text-xs font-semibold backdrop-blur-sm",
         className
       )}
       role="group"
@@ -24,7 +24,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
         type="button"
         onClick={() => toggle("es")}
         className={cn(
-          "rounded-full px-2.5 py-1 transition-colors",
+          "rounded-full px-2 py-1 transition-colors md:px-2.5",
           locale === "es"
             ? "bg-gradient-to-r from-[#9E00FF] to-[#3A89FF] text-white"
             : "text-muted-foreground hover:text-foreground"
@@ -36,7 +36,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
         type="button"
         onClick={() => toggle("en")}
         className={cn(
-          "rounded-full px-2.5 py-1 transition-colors",
+          "rounded-full px-2 py-1 transition-colors md:px-2.5",
           locale === "en"
             ? "bg-gradient-to-r from-[#9E00FF] to-[#3A89FF] text-white"
             : "text-muted-foreground hover:text-foreground"
