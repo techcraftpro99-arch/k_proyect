@@ -19,12 +19,19 @@ interface HomePageProps {
     sort?: string;
     featured?: string;
     bestseller?: string;
+    discount?: string;
   }>;
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {
   const params = await searchParams;
-  const showShop = params.section === "shop" || params.category || params.search;
+  const showShop =
+    params.section === "shop" ||
+    params.category ||
+    params.search ||
+    params.featured === "true" ||
+    params.bestseller === "true" ||
+    params.discount === "true";
 
   const catalogOnline = await isCatalogOnline();
   const categories = catalogOnline ? await getCategories() : [];
@@ -36,6 +43,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         sort: params.sort as "price-asc" | "price-desc" | "rating" | undefined,
         featured: params.featured === "true",
         bestseller: params.bestseller === "true",
+        onDiscount: params.discount === "true",
       })
     : [];
 

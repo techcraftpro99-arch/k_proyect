@@ -86,8 +86,9 @@ export const dictionaries = {
       browse: "Browse Products",
       contactInfo: "Contact Information",
       email: "Email *",
-      name: "Name (optional)",
+      name: "Name *",
       namePlaceholder: "Your name",
+      nameRequired: "Please enter your name before paying",
       paymentMethod: "Payment Method",
       paypal: "PayPal",
       whatsapp: "WhatsApp",
@@ -136,7 +137,68 @@ export const dictionaries = {
       rights: "All rights reserved.",
       privacy: "Privacy",
       terms: "Terms",
-      support: "Support",
+    },
+    legal: {
+      title: "Privacy & Terms",
+      updated: "Last updated: March 22, 2026",
+      privacyTitle: "Privacy Policy",
+      privacyIntro:
+        "This Privacy Policy explains how Blog de la diseñadora (“we”, “us”) collects, uses, and protects information when you use our digital store and related services.",
+      privacySections: [
+        {
+          title: "Information we collect",
+          body: "We may collect your name, email address, order details, payment confirmation data from third-party providers (such as PayPal), and technical data needed to operate the site (for example, cookies or session data for cart and language preferences).",
+        },
+        {
+          title: "How we use your information",
+          body: "We use your information to process orders, deliver digital products, send download links, provide customer support, improve the store, and comply with legal obligations.",
+        },
+        {
+          title: "Payments",
+          body: "Payments may be processed by third parties (for example PayPal). We do not store full card numbers on our servers. Those providers process payment data under their own privacy policies.",
+        },
+        {
+          title: "Data retention",
+          body: "We keep order and delivery records for as long as needed for support, accounting, and legal requirements, then delete or anonymize them when no longer necessary.",
+        },
+        {
+          title: "Your rights",
+          body: "Depending on your location, you may request access, correction, or deletion of your personal data. Contact us through the channels listed on the About page to exercise these rights.",
+        },
+        {
+          title: "Contact",
+          body: "For privacy questions, reach out via the contact options on the About page.",
+        },
+      ],
+      termsTitle: "Terms of Service",
+      termsIntro:
+        "By accessing or purchasing from this store, you agree to these Terms of Service.",
+      termsSections: [
+        {
+          title: "Digital products",
+          body: "All products sold are digital goods. After a confirmed purchase you receive licensed access to download the files. Unless stated otherwise, purchases are personal licenses for your own use and are not for resale or redistribution.",
+        },
+        {
+          title: "Delivery",
+          body: "Digital downloads are typically delivered by email or through download links after payment confirmation or manual approval. Links may expire after a limited time for security reasons.",
+        },
+        {
+          title: "Refunds",
+          body: "Because products are digital and delivered electronically, refunds are generally not available once files have been delivered, except where required by applicable law or if a file is defective and we cannot provide a working replacement.",
+        },
+        {
+          title: "Acceptable use",
+          body: "You may not reverse-engineer, redistribute, resell, or claim authorship of our products in ways that violate these terms or applicable intellectual property laws.",
+        },
+        {
+          title: "Liability",
+          body: "The store is provided “as is”. To the fullest extent permitted by law, we are not liable for indirect or consequential damages arising from use of the products or the website.",
+        },
+        {
+          title: "Changes",
+          body: "We may update these terms from time to time. Continued use of the store after changes means you accept the updated terms.",
+        },
+      ],
     },
     lang: {
       en: "EN",
@@ -226,8 +288,9 @@ export const dictionaries = {
       browse: "Ver productos",
       contactInfo: "Información de contacto",
       email: "Email *",
-      name: "Nombre (opcional)",
+      name: "Nombre *",
       namePlaceholder: "Tu nombre",
+      nameRequired: "Ingresa tu nombre antes de pagar",
       paymentMethod: "Método de pago",
       paypal: "PayPal",
       whatsapp: "WhatsApp",
@@ -277,7 +340,68 @@ export const dictionaries = {
       rights: "Todos los derechos reservados.",
       privacy: "Privacidad",
       terms: "Términos",
-      support: "Soporte",
+    },
+    legal: {
+      title: "Privacidad y términos",
+      updated: "Última actualización: 22 de marzo de 2026",
+      privacyTitle: "Política de privacidad",
+      privacyIntro:
+        "Esta Política de Privacidad explica cómo Blog de la diseñadora (“nosotros”) recopila, usa y protege la información cuando utilizas nuestra tienda digital y servicios relacionados.",
+      privacySections: [
+        {
+          title: "Información que recopilamos",
+          body: "Podemos recopilar tu nombre, correo electrónico, datos del pedido, confirmaciones de pago de terceros (por ejemplo PayPal) y datos técnicos necesarios para operar el sitio (por ejemplo cookies o sesión para el carrito e idioma).",
+        },
+        {
+          title: "Cómo usamos tu información",
+          body: "Usamos tu información para procesar pedidos, entregar productos digitales, enviar enlaces de descarga, brindar soporte, mejorar la tienda y cumplir obligaciones legales.",
+        },
+        {
+          title: "Pagos",
+          body: "Los pagos pueden procesarse mediante terceros (por ejemplo PayPal). No almacenamos números completos de tarjetas en nuestros servidores. Esos proveedores tratan los datos de pago según sus propias políticas.",
+        },
+        {
+          title: "Conservación de datos",
+          body: "Conservamos registros de pedidos y entrega el tiempo necesario para soporte, contabilidad y requisitos legales; luego los eliminamos o anonimizamos cuando ya no sean necesarios.",
+        },
+        {
+          title: "Tus derechos",
+          body: "Según tu ubicación, puedes solicitar acceso, corrección o eliminación de tus datos personales. Contáctanos por los canales indicados en la página Sobre mí para ejercer estos derechos.",
+        },
+        {
+          title: "Contacto",
+          body: "Para consultas de privacidad, usa las opciones de contacto de la página Sobre mí.",
+        },
+      ],
+      termsTitle: "Términos de servicio",
+      termsIntro:
+        "Al acceder o comprar en esta tienda, aceptas estos Términos de servicio.",
+      termsSections: [
+        {
+          title: "Productos digitales",
+          body: "Todos los productos son bienes digitales. Tras una compra confirmada recibes una licencia de acceso para descargar los archivos. Salvo que se indique lo contrario, la compra es una licencia personal de uso propio y no autoriza reventa ni redistribución.",
+        },
+        {
+          title: "Entrega",
+          body: "Las descargas suelen entregarse por correo o enlaces tras la confirmación del pago o la aprobación manual. Los enlaces pueden caducar por seguridad tras un tiempo limitado.",
+        },
+        {
+          title: "Reembolsos",
+          body: "Al ser productos digitales entregados electrónicamente, en general no hay reembolso una vez entregados los archivos, salvo cuando lo exija la ley o si un archivo está defectuoso y no podemos ofrecer un reemplazo funcional.",
+        },
+        {
+          title: "Uso aceptable",
+          body: "No puedes redistribuir, revender ni atribuirte la autoría de nuestros productos de forma que incumpla estos términos o las leyes de propiedad intelectual aplicables.",
+        },
+        {
+          title: "Responsabilidad",
+          body: "La tienda se ofrece “tal cual”. En la máxima medida permitida por la ley, no somos responsables de daños indirectos o consecuentes derivados del uso de los productos o del sitio.",
+        },
+        {
+          title: "Cambios",
+          body: "Podemos actualizar estos términos. El uso continuado de la tienda tras los cambios implica que aceptas la versión actualizada.",
+        },
+      ],
     },
     lang: {
       en: "EN",

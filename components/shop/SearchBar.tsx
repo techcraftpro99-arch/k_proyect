@@ -22,7 +22,7 @@ export function SearchBar() {
       params.delete("search");
     }
     params.set("section", "shop");
-    router.push(`/?${params.toString()}`);
+    router.push(`/?${params.toString()}`, { scroll: false });
   }
 
   return (

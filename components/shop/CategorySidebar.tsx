@@ -30,24 +30,41 @@ const iconMap: Record<string, LucideIcon> = {
 interface CategorySidebarProps {
   categories: Category[];
   className?: string;
+  onNavigate?: () => void;
 }
 
-export function CategorySidebar({ categories, className }: CategorySidebarProps) {
+export function CategorySidebar({
+  categories,
+  className,
+  onNavigate,
+}: CategorySidebarProps) {
   const searchParams = useSearchParams();
   const activeCategory = searchParams.get("category");
+  const isFeatured = searchParams.get("featured") === "true";
+  const isBestseller = searchParams.get("bestseller") === "true";
+  const isOnDiscount = searchParams.get("discount") === "true";
+  const hasQuickFilter = isFeatured || isBestseller || isOnDiscount;
   const [featuredOpen, setFeaturedOpen] = useState(true);
   const { t, locale } = useI18n();
   const localizedCategories = localizeCategories(categories, locale);
 
-  function buildHref(params: Record<string, string | null>) {
-    const sp = new URLSearchParams(searchParams.toString());
+  /** Build shop URLs. Quick filters reset category/search so results are visible. */
+  function shopHref(params: Record<string, string | null>) {
+    const sp = new URLSearchParams();
+    sp.set("section", "shop");
     Object.entries(params).forEach(([k, v]) => {
       if (v) sp.set(k, v);
-      else sp.delete(k);
     });
-    sp.set("section", "shop");
     return `/?${sp.toString()}`;
   }
+
+  const linkClass = (active: boolean) =>
+    cn(
+      "block rounded-lg px-3 py-1.5 text-sm transition-colors hover:bg-white/60 hover:text-foreground",
+      active
+        ? "bg-white/80 font-medium text-foreground"
+        : "text-muted-foreground"
+    );
 
   return (
     <aside className={cn("glass-card p-5", className)}>
@@ -58,10 +75,12 @@ export function CategorySidebar({ categories, className }: CategorySidebarProps)
       <ul className="space-y-1">
         <li>
           <Link
-            href={buildHref({ category: null })}
+            href={shopHref({})}
+            scroll={false}
+            onClick={onNavigate}
             className={cn(
               "flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-white/60",
-              !activeCategory && "bg-white/80 font-medium"
+              !activeCategory && !hasQuickFilter && "bg-white/80 font-medium"
             )}
           >
             {t.shop.allProducts}
@@ -72,10 +91,14 @@ export function CategorySidebar({ categories, className }: CategorySidebarProps)
           return (
             <li key={cat.id}>
               <Link
-                href={buildHref({ category: cat.slug })}
+                href={shopHref({ category: cat.slug })}
+                scroll={false}
+                onClick={onNavigate}
                 className={cn(
                   "flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-white/60",
-                  activeCategory === cat.slug && "bg-white/80 font-medium"
+                  activeCategory === cat.slug &&
+                    !hasQuickFilter &&
+                    "bg-white/80 font-medium"
                 )}
               >
                 <Icon className="h-4 w-4 text-muted-foreground" />
@@ -101,24 +124,30 @@ export function CategorySidebar({ categories, className }: CategorySidebarProps)
           <ul className="mt-2 space-y-1 pl-1">
             <li>
               <Link
-                href={buildHref({ featured: "true", bestseller: null })}
-                className="block rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:bg-white/60 hover:text-foreground"
+                href={shopHref({ featured: "true" })}
+                scroll={false}
+                onClick={onNavigate}
+                className={linkClass(isFeatured)}
               >
                 {t.shop.featuredLink}
               </Link>
             </li>
             <li>
               <Link
-                href={buildHref({ bestseller: "true", featured: null })}
-                className="block rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:bg-white/60 hover:text-foreground"
+                href={shopHref({ bestseller: "true" })}
+                scroll={false}
+                onClick={onNavigate}
+                className={linkClass(isBestseller)}
               >
                 {t.shop.bestSelling}
               </Link>
             </li>
             <li>
               <Link
-                href="/?section=shop&sort=price-asc"
-                className="block rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:bg-white/60 hover:text-foreground"
+                href={shopHref({ discount: "true" })}
+                scroll={false}
+                onClick={onNavigate}
+                className={linkClass(isOnDiscount)}
               >
                 {t.shop.onDiscounts}
               </Link>

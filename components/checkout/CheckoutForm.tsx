@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { ExternalLink, Loader2, Trash2 } from "lucide-react";
 import { useCart } from "@/components/cart/CartProvider";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useI18n } from "@/components/i18n/LocaleProvider";
 import { formatPrice, isProductPhotoUrl } from "@/lib/format";
 
@@ -33,6 +35,7 @@ export function CheckoutForm({ buySlug }: CheckoutFormProps) {
   const { items, removeItem, total, clearCart } = useCart();
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [customerName, setCustomerName] = useState("");
   const [buyProduct, setBuyProduct] = useState<CheckoutItem | null>(null);
   const [cartProducts, setCartProducts] = useState<CheckoutItem[]>([]);
   const [loadingCart, setLoadingCart] = useState(!buySlug && items.length > 0);
@@ -118,6 +121,12 @@ export function CheckoutForm({ buySlug }: CheckoutFormProps) {
     : checkoutItems.reduce((sum, i) => sum + i.price, 0) || total;
 
   async function payProduct(item: CheckoutItem) {
+    const name = customerName.trim();
+    if (name.length < 2) {
+      setError(t.checkout.nameRequired);
+      return;
+    }
+
     if (!item.paymentLink) {
       setError(t.checkout.noPaymentLink);
       return;
@@ -131,6 +140,7 @@ export function CheckoutForm({ buySlug }: CheckoutFormProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          customerName: name,
           paymentMethod: "paypal",
           items: [{ productId: item.productId, quantity: 1 as const }],
         }),
@@ -144,7 +154,9 @@ export function CheckoutForm({ buySlug }: CheckoutFormProps) {
         if (items.length <= 1) clearCart();
       }
 
-      window.location.assign(data.redirectUrl as string);
+      const payUrl = data.redirectUrl as string;
+      window.open(payUrl, "_blank", "noopener,noreferrer");
+      setLoadingId(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : t.checkout.checkoutFailed);
       setLoadingId(null);
@@ -213,6 +225,22 @@ export function CheckoutForm({ buySlug }: CheckoutFormProps) {
       </div>
 
       <div className="glass-card p-6 sm:p-8">
+        <h2 className="text-lg font-semibold">{t.checkout.contactInfo}</h2>
+        <div className="mt-4 space-y-2">
+          <Label htmlFor="customer-name">{t.checkout.name}</Label>
+          <Input
+            id="customer-name"
+            value={customerName}
+            onChange={(e) => setCustomerName(e.target.value)}
+            placeholder={t.checkout.namePlaceholder}
+            autoComplete="name"
+            maxLength={100}
+            className="h-11 rounded-xl bg-white/70"
+          />
+        </div>
+      </div>
+
+      <div className="glass-card p-6 sm:p-8">
         <h2 className="text-lg font-semibold">{t.checkout.paymentMethod}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t.checkout.paypalLinkHint}</p>
 
@@ -229,7 +257,11 @@ export function CheckoutForm({ buySlug }: CheckoutFormProps) {
           ) : checkoutItems.length === 1 ? (
             <Button
               className="btn-gradient w-full rounded-full py-6 text-base"
-              disabled={!!loadingId || !checkoutItems[0].paymentLink}
+              disabled={
+                !!loadingId ||
+                !checkoutItems[0].paymentLink ||
+                customerName.trim().length < 2
+              }
               onClick={() => void payProduct(checkoutItems[0])}
             >
               {loadingId ? (
@@ -251,7 +283,11 @@ export function CheckoutForm({ buySlug }: CheckoutFormProps) {
                 <Button
                   key={item.productId}
                   className="btn-gradient w-full rounded-full"
-                  disabled={!!loadingId || !item.paymentLink}
+                  disabled={
+                    !!loadingId ||
+                    !item.paymentLink ||
+                    customerName.trim().length < 2
+                  }
                   onClick={() => void payProduct(item)}
                 >
                   {loadingId === item.productId ? (

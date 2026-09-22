@@ -41,6 +41,12 @@ export default function AdminDashboardLayout({
             >
               Pedidos
             </Link>
+            <Link
+              href="/admin/settings"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              Marca
+            </Link>
             <Link href="/" className="text-muted-foreground hover:text-foreground">
               Tienda
             </Link>

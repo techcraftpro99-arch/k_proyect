@@ -6,6 +6,8 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { LocaleProvider } from "@/components/i18n/LocaleProvider";
 import { GradientBackground } from "@/components/layout/GradientBackground";
+import { BrandProvider } from "@/components/brand/BrandProvider";
+import { getStoreSettings } from "@/lib/store-settings";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -40,17 +42,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const settings = await getStoreSettings();
+
   return (
     <html lang="es" className={`${inter.variable} h-full`}>
       <body className="relative min-h-full">
         <GradientBackground />
         <LocaleProvider>
-          <CartProvider>
-            <Header />
-            <main className="relative z-10 flex-1">{children}</main>
-            <Footer />
-          </CartProvider>
+          <BrandProvider brandImageUrl={settings.brandImageUrl}>
+            <CartProvider>
+              <Header />
+              <main className="relative z-10 flex-1">{children}</main>
+              <Footer />
+            </CartProvider>
+          </BrandProvider>
         </LocaleProvider>
       </body>
     </html>

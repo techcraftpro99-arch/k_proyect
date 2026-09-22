@@ -286,6 +286,24 @@ export type Database = {
           },
         ];
       };
+      store_settings: {
+        Row: {
+          id: number;
+          brand_image_path: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          id?: number;
+          brand_image_path?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          id?: number;
+          brand_image_path?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

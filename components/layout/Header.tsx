@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, Search, ShoppingCart, User } from "lucide-react";
+import { ShoppingCart, User } from "lucide-react";
 import { useCart } from "@/components/cart/CartProvider";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
@@ -16,8 +16,6 @@ export function Header() {
     { href: "/", label: t.nav.home },
     { href: "/?section=shop", label: t.nav.shop },
     { href: "/about", label: t.nav.about },
-    { href: "/?featured=true", label: t.nav.sale },
-    { href: "#contact", label: t.nav.contact },
   ];
 
   return (
@@ -44,12 +42,6 @@ export function Header() {
 
         <div className="flex items-center gap-1 sm:gap-2">
           <LanguageSwitcher className="mr-1" />
-          <Button variant="ghost" size="icon" aria-label={t.nav.search}>
-            <Search className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon" aria-label={t.nav.favorites}>
-            <Heart className="h-5 w-5" />
-          </Button>
           <Link href="/checkout">
             <Button
               variant="ghost"

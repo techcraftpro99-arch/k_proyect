@@ -37,6 +37,8 @@ export interface ProductFilters {
   sort?: "price-asc" | "price-desc" | "newest" | "rating";
   featured?: boolean;
   bestseller?: boolean;
+  /** Products with discount_percent > 0 */
+  onDiscount?: boolean;
   limit?: number;
   offset?: number;
 }

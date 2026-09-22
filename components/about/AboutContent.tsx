@@ -1,14 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Sparkles, Sword, Gift, Megaphone, Clapperboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { BrandMark } from "@/components/brand/BrandMark";
+import { useBrand } from "@/components/brand/BrandProvider";
 import { useI18n } from "@/components/i18n/LocaleProvider";
+import { DEFAULT_BRAND_IMAGE } from "@/lib/brand-constants";
 
 export function AboutContent() {
   const { t } = useI18n();
+  const { brandImageUrl, isCustomBrandImage } = useBrand();
   const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+  const portraitSrc = isCustomBrandImage ? brandImageUrl : DEFAULT_BRAND_IMAGE;
 
   const services = [
     { icon: Clapperboard, ...t.about.services.mvp },
@@ -21,7 +25,7 @@ export function AboutContent() {
     ? `https://wa.me/${whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(
         "Hola Karol! Quiero una animación / flyer para mi live ⚔️"
       )}`
-    : "#contact";
+    : null;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
@@ -61,31 +65,55 @@ export function AboutContent() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <a href={contactHref} target={whatsapp ? "_blank" : undefined} rel="noreferrer">
-                <Button
-                  variant="outline"
-                  className="rounded-full border-white/70 bg-white/70 px-6"
-                >
-                  {t.about.ctaContact}
-                </Button>
-              </a>
+              {contactHref && (
+                <a href={contactHref} target="_blank" rel="noreferrer">
+                  <Button
+                    variant="outline"
+                    className="rounded-full border-white/70 bg-white/70 px-6"
+                  >
+                    {t.about.ctaContact}
+                  </Button>
+                </a>
+              )}
             </div>
           </div>
 
           <div className="flex flex-col items-center justify-center gap-6">
             <div
-              className="rounded-[28px] p-[2px] shadow-xl"
+              className="w-full max-w-[280px] rounded-[28px] p-[2px] shadow-xl"
               style={{
                 background: "linear-gradient(135deg, #9E00FF, #3A89FF)",
                 boxShadow: "0 24px 60px rgba(158,0,255,0.2)",
               }}
             >
-              <div className="flex flex-col items-center rounded-[26px] bg-white/80 px-10 py-12 backdrop-blur-xl">
-                <BrandMark size="lg" className="h-24 w-28 sm:h-28 sm:w-32" />
-                <p className="mt-6 text-2xl font-bold tracking-tight">Karol</p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Motion · Live · Battle Design
-                </p>
+              <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[26px] bg-white/80">
+                {!isCustomBrandImage && (
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #9E00FF 0%, #3A89FF 100%)",
+                    }}
+                  />
+                )}
+                <Image
+                  src={portraitSrc}
+                  alt="Karol"
+                  fill
+                  priority
+                  sizes="280px"
+                  unoptimized={portraitSrc.startsWith("http")}
+                  className={
+                    isCustomBrandImage
+                      ? "object-cover"
+                      : "object-contain p-10 mix-blend-screen"
+                  }
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/40 to-transparent px-5 pb-5 pt-16 text-center">
+                  <p className="text-2xl font-bold tracking-tight text-white">
+                    Karol
+                  </p>
+                </div>
               </div>
             </div>
             <p className="max-w-sm text-center text-sm text-muted-foreground">

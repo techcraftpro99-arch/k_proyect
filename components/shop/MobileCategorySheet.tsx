@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Menu } from "lucide-react";
 import {
   Sheet,
@@ -18,9 +19,10 @@ interface MobileCategorySheetProps {
 
 export function MobileCategorySheet({ categories }: MobileCategorySheetProps) {
   const { t } = useI18n();
+  const [open, setOpen] = useState(false);
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger className="inline-flex items-center justify-center gap-2 rounded-full border border-input bg-background px-4 py-2 text-sm font-medium lg:hidden">
         <Menu className="h-4 w-4" />
         {t.shop.categories}
@@ -33,6 +35,7 @@ export function MobileCategorySheet({ categories }: MobileCategorySheetProps) {
           <CategorySidebar
             categories={categories}
             className="border-0 bg-transparent shadow-none"
+            onNavigate={() => setOpen(false)}
           />
         </div>
       </SheetContent>

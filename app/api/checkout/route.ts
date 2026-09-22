@@ -61,7 +61,7 @@ export async function POST(request: Request) {
     }
 
     const { order, error } = await createOrder({
-      customerName,
+      customerName: customerName.trim(),
       paymentMethod,
       items: [
         {

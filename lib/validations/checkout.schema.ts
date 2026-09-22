@@ -7,7 +7,11 @@ export const checkoutSchema = z.object({
     .email("Invalid email address")
     .optional()
     .or(z.literal("")),
-  customerName: z.string().trim().max(100).optional(),
+  customerName: z
+    .string()
+    .trim()
+    .min(2, "Name is required")
+    .max(100, "Name is too long"),
   paymentMethod: z.enum(["paypal", "whatsapp", "tiktok"]),
   items: z
     .array(

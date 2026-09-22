@@ -56,20 +56,27 @@ export function OrdersTable({ orders: initialOrders }: OrdersTableProps) {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-white/50 text-left text-muted-foreground">
-              <th className="p-4 font-medium">Order</th>
-              <th className="p-4 font-medium">Email</th>
-              <th className="p-4 font-medium">Method</th>
+              <th className="p-4 font-medium">Cliente</th>
+              <th className="p-4 font-medium">Orden</th>
+              <th className="p-4 font-medium">Método</th>
               <th className="p-4 font-medium">Total</th>
-              <th className="p-4 font-medium">Status</th>
-              <th className="p-4 font-medium">Date</th>
-              <th className="p-4 font-medium">Action</th>
+              <th className="p-4 font-medium">Estado</th>
+              <th className="p-4 font-medium">Fecha</th>
+              <th className="p-4 font-medium">Acción</th>
             </tr>
           </thead>
           <tbody>
             {orders.map((order) => (
               <tr key={order.id} className="border-b border-white/30">
+                <td className="p-4">
+                  <p className="font-medium">
+                    {order.customerName?.trim() || "Sin nombre"}
+                  </p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    {order.email}
+                  </p>
+                </td>
                 <td className="p-4 font-mono text-xs">{order.id.slice(0, 8)}…</td>
-                <td className="p-4">{order.email}</td>
                 <td className="p-4 capitalize">{order.paymentMethod}</td>
                 <td className="p-4 font-medium">{formatPrice(order.total)}</td>
                 <td className="p-4">
@@ -78,7 +85,11 @@ export function OrdersTable({ orders: initialOrders }: OrdersTableProps) {
                   </Badge>
                 </td>
                 <td className="p-4 text-muted-foreground">
-                  {new Date(order.createdAt).toLocaleDateString()}
+                  {new Date(order.createdAt).toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  })}
                 </td>
                 <td className="p-4">
                   {order.status === "pending" && (

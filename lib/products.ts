@@ -154,6 +154,9 @@ export async function getProducts(filters: ProductFilters = {}): Promise<Product
     }
     if (filters.featured) query = query.eq("is_featured", true);
     if (filters.bestseller) query = query.eq("is_bestseller", true);
+    if (filters.onDiscount) {
+      query = query.not("discount_percent", "is", null).gt("discount_percent", 0);
+    }
 
     switch (filters.sort) {
       case "price-asc":
