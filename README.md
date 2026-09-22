@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Digital Design Store
+
+Premium e-commerce platform for selling digital design assets (mockups, presets, templates, vectors). Built with Next.js, Supabase, and a modular payment system.
+
+## Tech Stack
+
+- **Frontend:** Next.js 16 (App Router), Tailwind CSS v4, Shadcn UI, Lucide Icons
+- **Backend:** Supabase (PostgreSQL + Storage)
+- **Payments:** PayPal (Phase 1) + WhatsApp/TikTok manual flow
+- **Email:** Resend (signed download links)
+- **Deploy:** Vercel
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment
+
+```bash
+cp .env.example .env.local
+```
+
+Fill in all variables. The store works with **mock product data** when Supabase is not configured, but checkout and admin require Supabase.
+
+### 3. Set up Supabase
+
+1. Create a project at [supabase.com](https://supabase.com)
+2. Run the migration in SQL Editor:
+   - [`supabase/migrations/20250819000000_initial_schema.sql`](supabase/migrations/20250819000000_initial_schema.sql)
+3. Run the seed:
+   - [`supabase/seed.sql`](supabase/seed.sql)
+4. Create storage buckets (if not created by migration):
+   - `product-previews` (public)
+   - `digital-assets` (private)
+5. Upload preview images to `product-previews` and digital files to `digital-assets`
+
+### 4. Run development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/                  # Pages and API routes
+components/           # UI components (shop, checkout, admin)
+lib/                  # Supabase, payments, delivery, validations
+types/                # TypeScript interfaces
+supabase/             # SQL migrations and seed
+public/images/        # Static assets and SVG placeholders
+```
 
-## Learn More
+## Payment Flows
 
-To learn more about Next.js, take a look at the following resources:
+### PayPal (automatic)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Customer completes checkout with PayPal Smart Buttons
+2. Server captures payment via PayPal API
+3. Signed download URLs (24h) are emailed automatically
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### WhatsApp / TikTok (manual)
 
-## Deploy on Vercel
+1. Customer creates order and is redirected to contact channel
+2. Admin approves order at `/admin/orders` (login with `ADMIN_SECRET`)
+3. Download links are emailed after approval
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Admin Panel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Visit `/admin/login`
+2. Enter your `ADMIN_SECRET`
+3. Manage orders at `/admin/orders`
+
+## Deploy to Vercel
+
+1. Push to GitHub
+2. Import project in [Vercel](https://vercel.com)
+3. Add all environment variables from `.env.example`
+4. Deploy
+
+### PayPal Webhook (production)
+
+Set webhook URL to: `https://your-domain.com/api/webhooks/paypal`
+
+Events: `CHECKOUT.ORDER.APPROVED`, `PAYMENT.CAPTURE.COMPLETED`
+
+## Adding Payment Providers (Phase 2)
+
+1. Create a new provider in `lib/payments/` implementing `PaymentProvider`
+2. Register it in `lib/payments/registry.ts`
+3. Add UI tab in `CheckoutForm`
+
+Example for Stripe: implement `StripeProvider`, add to registry, add env vars.
+
+## License
+
+Private — all rights reserved.
